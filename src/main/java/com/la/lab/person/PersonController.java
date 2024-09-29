@@ -1,12 +1,10 @@
 package com.la.lab.person;
 
-import com.la.lab.person.model.Person;
+import com.la.lab.person.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -16,42 +14,27 @@ public class PersonController {
     private PersonService personService;
 
     @GetMapping
-    public List<Person> getAllPersons() {
+    public List<PersonDto> getAllPersons() {
         return personService.getAllPersons();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable Long id) {
-        Optional<Person> person = personService.getPersonById(id);
-        return person.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public PersonDto getPersonById(@PathVariable long id) {
+        return personService.getPersonById(id);
     }
 
     @PostMapping
-    public Person createPerson(@RequestBody Person person) {
-        return personService.savePerson(person);
+    public PersonDto createPerson(@RequestBody PersonDto personDto) {
+        return personService.savePerson(personDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person updatedPerson) {
-        Optional<Person> existingPerson = personService.getPersonById(id);
-        if (existingPerson.isPresent()) {
-            Person person = existingPerson.get();
-            person.setFirstName(updatedPerson.getFirstName());
-            person.setLastName(updatedPerson.getLastName());
-            return ResponseEntity.ok(personService.savePerson(person));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public PersonDto updatePerson(@PathVariable long id, @RequestBody PersonDto personDto) {
+        return personService.updatePerson(id, personDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
-        if (personService.getPersonById(id).isPresent()) {
-            personService.deletePerson(id);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public void deletePerson(@PathVariable long id) {
+        personService.deletePerson(id);
     }
 }
