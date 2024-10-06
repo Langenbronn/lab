@@ -15,30 +15,33 @@ public class PersonService {
     private PersonRepository personRepository;
     private final  PersonMapper personMapper = PersonMapper.INSTANCE;
 
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
+
     public List<PersonDto> getAllPersons() {
         return personMapper.personsToPersonDtos(personRepository.findAll());
     }
 
-    public PersonDto getPersonById(final long id) {
+    public PersonDto getPersonById(final Long id) {
         return personRepository.findById(id)
                 .map(person -> personMapper.personToPersonDto(person))
                 .orElseThrow();
     }
 
-    public PersonDto updatePerson(long id, PersonDto personDto) {
+    public PersonDto updatePerson(final Long id, PersonDto personDto) {
         personRepository.findById(id).orElseThrow();
         Person person = personMapper.personDtoToPerson(personDto);
         person.setId(id);
         return personMapper.personToPersonDto(personRepository.save(person));
     }
 
-    public PersonDto savePerson(PersonDto personDto) {
-//        TODO check if already exist
+    public PersonDto savePerson(final PersonDto personDto) {
         Person person = personMapper.personDtoToPerson(personDto);
         return personMapper.personToPersonDto(personRepository.save(person));
     }
 
-    public void deletePerson(long id) {
+    public void deletePerson(final Long id) {
         personRepository.findById(id).orElseThrow();
         personRepository.deleteById(id);
     }
