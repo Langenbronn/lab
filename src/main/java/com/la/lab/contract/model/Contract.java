@@ -1,4 +1,4 @@
-package com.la.lab.person.model;
+package com.la.lab.contract.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,18 +8,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
-@Entity(name = "person")
+@Entity(name = "contract")
 @NoArgsConstructor
-public class Person {
+public class Contract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String lastName;
-    private int age;
-
+    private String type;
+    private LocalDate createDate;
+    private LocalDate updateDate;
 
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PersonDto {
 
     private Long id;
@@ -14,6 +15,4 @@ public class PersonDto {
     private String lastName;
     private int age;
 
-    public PersonDto() {
-    }
 }

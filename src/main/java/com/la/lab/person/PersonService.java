@@ -13,7 +13,7 @@ public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
-    private final  PersonMapper personMapper = PersonMapper.INSTANCE;
+    private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
     public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
@@ -25,7 +25,7 @@ public class PersonService {
 
     public PersonDto getPersonById(final Long id) {
         return personRepository.findById(id)
-                .map(person -> personMapper.personToPersonDto(person))
+                .map(personMapper::personToPersonDto)
                 .orElseThrow();
     }
 
