@@ -3,8 +3,8 @@ package com.la.lab.contract;
 import com.la.lab.contract.dto.ContractDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/contracts")
@@ -14,22 +14,22 @@ public class ContractController {
     private ContractService contractService;
 
     @GetMapping
-    public List<ContractDto> getAllContracts() {
+    public Flux<ContractDto> getAllContracts() {
         return contractService.getAllContracts();
     }
 
     @GetMapping("/{id}")
-    public ContractDto getContractById(@PathVariable long id) {
+    public Mono<ContractDto> getContractById(@PathVariable long id) {
         return contractService.getContractById(id);
     }
 
     @PostMapping
-    public ContractDto createContract(@RequestBody ContractDto contractDto) {
+    public Mono<ContractDto> createContract(@RequestBody ContractDto contractDto) {
         return contractService.saveContract(contractDto);
     }
 
     @PutMapping("/{id}")
-    public ContractDto updateContract(@PathVariable long id, @RequestBody ContractDto contractDto) {
+    public Mono<ContractDto> updateContract(@PathVariable long id, @RequestBody ContractDto contractDto) {
         return contractService.updateContract(id, contractDto);
     }
 

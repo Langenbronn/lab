@@ -3,9 +3,10 @@ package com.la.lab.contract;
 import com.la.lab.contract.dto.ContractDto;
 import com.la.lab.contract.mapper.ContractMapper;
 import com.la.lab.contract.model.Contract;
-import com.la.lab.person.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -20,26 +21,26 @@ public class ContractService {
         this.contractRepository = contractRepository;
     }
 
-    public List<ContractDto> getAllContracts() {
-        return contractMapper.contratsToContratDtos(contractRepository.findAll());
+    public Flux<ContractDto> getAllContracts() {
+        return Flux.fromIterable(contractMapper.contratsToContratDtos(contractRepository.findAll()));
     }
 
-    public ContractDto getContractById(final Long id) {
-        return contractRepository.findById(id)
+    public Mono<ContractDto> getContractById(final Long id) {
+        return Mono.just(contractRepository.findById(id)
                 .map(contractMapper::contratToContratDto)
-                .orElseThrow();
+                .orElseThrow());
     }
 
-    public ContractDto updateContract(final Long id, ContractDto ContractDto) {
+    public Mono<ContractDto> updateContract(final Long id, ContractDto ContractDto) {
         contractRepository.findById(id).orElseThrow();
         Contract contract = contractMapper.contratDtoToContrat(ContractDto);
         contract.setId(id);
-        return contractMapper.contratToContratDto(contractRepository.save(contract));
+        return Mono.just(contractMapper.contratToContratDto(contractRepository.save(contract)));
     }
 
-    public ContractDto saveContract(final ContractDto ContractDto) {
+    public Mono<ContractDto> saveContract(final ContractDto ContractDto) {
         Contract contract = contractMapper.contratDtoToContrat(ContractDto);
-        return contractMapper.contratToContratDto(contractRepository.save(contract));
+        return Mono.just(contractMapper.contratToContratDto(contractRepository.save(contract)));
     }
 
     public void deleteContract(final Long id) {
